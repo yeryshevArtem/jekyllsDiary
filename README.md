@@ -1,0 +1,1 @@
+My name is doctor Jekyll. The reason, why I started this diary is problem in my body. In some days, after midnight my body is covering with a layer of thick skin and my mind is getting  out of control. This transformation makes me dangerous for the people around them. Whatever to protect own and other, I want to create "The diary of events" and write it all my day.
