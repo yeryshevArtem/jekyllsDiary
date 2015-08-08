@@ -1,40 +1,21 @@
 var application = function () {
     var body = $("body");
 
-    showAuthorizationWindow(body);
+    takeANote(body);
+    displayActivitiesTable();
 
-    $("a.submitAuthorization").click(function (event) {
-        var name = $("input.name").val();
-        if ("jekyll" === name.toLowerCase()) {
-            alert("Thank you for authorization!");
+    $("a.submitNote").click(function() {
+        var activity = $(".activity").val();
+        var timeSpent = $(".timeSpent").val();
 
-            clear(event);
-            console.log("Follow the white rabbit!");
-            takeANote(body);
-            displayActivitiesTable();
+        clearActivityFields(body);
+        displayActivity(activity, timeSpent);
 
-            $("a.submitNote").click(function() {
-                var activity = $(".activity").val();
-                var timeSpent = $(".timeSpent").val();
-
-                clearActivityFields(body);
-                displayActivity(activity, timeSpent);
-
-                alert("Activity has been logged!");
-            });
-        } else {
-            alert("Wrong name!");
-        }
+        alert("Activity has been logged!");
     });
 };
 
 $(document).ready(application);
-
-var clear = function (event) {
-    event.target.remove();
-    $("input.name").remove();
-    $('label').remove();
-};
 
 var takeANote = function (body) {
     console.log("Wake up, Neo!");
@@ -49,18 +30,6 @@ var takeANote = function (body) {
                 '<input class="timeSpent form-control" type="text">' +
             '</div>' +
             '<a href="#" class="submitNote btn btn-default">Submit</a>' +
-        '</form>'
-    );
-};
-
-var showAuthorizationWindow = function (body) {
-    body.append(
-        '<form>' +
-            '<div class="form-group">' +
-                '<label>Enter your name:</label>' +
-                '<input type="text" class="name form-control">' +
-            '</div>' +
-            '<a href="#" class="submitAuthorization btn btn-default">Submit</a>' +
         '</form>'
     );
 };
