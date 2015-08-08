@@ -3,15 +3,17 @@ var application = function () {
 
     showAuthorizationWindow(body);
 
-    $("button.submitAuthorization").click(function (event) {
+    $("a.submitAuthorization").click(function (event) {
         var name = $("input.name").val();
         if ("jekyll" === name.toLowerCase()) {
             alert("Thank you for authorization!");
 
             clear(event);
+            console.log("Follow the white rabbit!");
             takeANote(body);
+            displayActivitiesTable();
 
-            $("button.submitNote").click(function() {
+            $("a.submitNote").click(function() {
                 var activity = $(".activity").val();
                 var timeSpent = $(".timeSpent").val();
 
@@ -35,27 +37,58 @@ var clear = function (event) {
 };
 
 var takeANote = function (body) {
-    body.append('<label class="">Enter activity:</label>');
-    body.append('<textarea class="activity form-control"></textarea>');
-    body.append('<label class="">Time spent:</label>');
-    body.append('<input class="timeSpent form-control" type="text">');
-    body.append('<button  class="submitNote btn btn-primary">Enter</button>');
+    console.log("Wake up, Neo!");
+    body.append(
+        '<form>' +
+            '<div class="form-group">' +
+                '<label>Enter activity:</label>' +
+                '<textarea class="activity form-control"></textarea>' +
+            '</div>' +
+            '<div class="form-group">' +
+                '<label>Time spent:</label>' +
+                '<input class="timeSpent form-control" type="text">' +
+            '</div>' +
+            '<a href="#" class="submitNote btn btn-default">Submit</a>' +
+        '</form>'
+    );
 };
 
 var showAuthorizationWindow = function (body) {
-    body.append('<label class="">Enter your name</label>');
-    body.append('<input type="text" class="name form-control">');
-    body.append('<button class="submitAuthorization btn btn-primary">Submit</button>');
+    body.append(
+        '<form>' +
+            '<div class="form-group">' +
+                '<label>Enter your name:</label>' +
+                '<input type="text" class="name form-control">' +
+            '</div>' +
+            '<a href="#" class="submitAuthorization btn btn-default">Submit</a>' +
+        '</form>'
+    );
 };
 
 var clearActivityFields = function (bodyTag) {
-    console.log(bodyTag.find('.timeSpent'));
-    console.log(bodyTag.find('.activity'));
-
     bodyTag.find('.timeSpent').val('');
     bodyTag.find('.activity').val('');
 };
 
 var displayActivity = function (someActivity, spentTime) {
-    $("body").append("<p>" + someActivity + " : " + spentTime + "</p>");
+    $('table.activities tbody').append(
+        "<tr>" +
+            "<td>" + someActivity + "</td>" +
+            "<td>" + spentTime + "</td>" +
+        "</tr>"
+    );
+};
+
+var displayActivitiesTable = function () {
+    $("body").append(
+        '<table class="table activities table-striped">' +
+            '<thead>' +
+                '<tr>' +
+                    '<th>Activity</th>' +
+                    '<th>Hours spent</th>' +
+                '</tr>' +
+            '</thead>' +
+            '<tbody></tbody>' +
+        '</table>'
+    );
 };
