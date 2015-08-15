@@ -8,10 +8,23 @@ var application = function () {
         var activity = $(".activity").val();
         var timeSpent = $(".timeSpent").val();
 
-        clearActivityFields(body);
-        displayActivity(activity, timeSpent);
+        var requestData = JSON.stringify({ activity: { description: activity, timeSpent: timeSpent }});
 
-        alert("Activity has been logged!");
+        $.ajax({
+            url: 'http://127.0.0.1:8000/hello',
+            method: "POST",
+            data: requestData,
+            success: function (response) {
+                console.log(response);
+                clearActivityFields(body);
+                appendActivity(response.activity);
+                alert("Activity has been logged!");
+            },
+            fail: function (response) {
+                console.log(response);
+                alert("Bad request!");
+            }
+        });
     });
 };
 
@@ -57,7 +70,23 @@ var displayActivitiesTable = function () {
                     '<th>Hours spent</th>' +
                 '</tr>' +
             '</thead>' +
-            '<tbody></tbody>' +
+            '<tbody>' +
+            '</tbody>' +
         '</table>'
     );
+
+    //$.ajax({
+    //    url: '127.0.0.1:8000/activities',
+    //    success: function (response) {
+    //        console.log(response.data);
+    //    },
+    //    fail: function (response) {
+    //        console.log(response);
+    //        alert("Bad request!");
+    //    }
+    //});
+};
+
+var appendActivity = function (activity) {
+    $("body > table > tbody").append("<tr><td>" + activity.description + "</td><td>" + activity.timeSpent + "</td></tr>");
 };
