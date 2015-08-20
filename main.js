@@ -1,14 +1,39 @@
 var application = function () {
     var body = $("body");
 
+
+
+
     createActivityForm(body);
     displayActivitiesTable();
 
     getActivities().then(function () {
-        $("button.edit").click(function(event) {
-            createEditActivityForm($("body"), $($(event.currentTarget).parent().parent().find('td')[1]).text());
-        });
+         //$("button.edit").click
+         //   (function(event) {
+         //       $(event.modal).modal('show');
+         //   });
+        $("button.delete").click
+            (function (event) {
+                $(event.target).parent().parent().remove();
+                var requestParamsDelete = {
+                    url: 'http://127.0.0.1:8000/activities',
+                    method: "DELETE",
+                    success: function (response) {
+                        alert("Activity has been deleted!");
+                    },
+                    fail: function (response) {
+                        console.log(response);
+                        alert("Bad request!");
+                    }
+                };
+            });
     });
+
+    var placeholderAct = $("body>table>thead>tr").find("th.activity").text();
+    var placeholderTime = $("body>table>thead>tr").find("th.hoursSpent").text();
+
+    $('input.description').attr('placeholder', placeholderAct);
+    $('input.timespent').attr('placeholder', placeholderTime);
 
     $("a.submitNote").click(function() {
         var activity = $(".activity").val();
@@ -37,40 +62,21 @@ var application = function () {
 
 $(document).ready(application);
 
+
+
+
+
+//ВСЕ ЭТО УЖЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ. НУ ТАМ ВСЯКИЕ ТАМ ОБРАБОТЧИКИ НУ ТАМ ЗАПРОСЫ ПОСЫЛАЮТ, НУ ТАМ
+//В DOM ЧТО-ТО ДОБАВЛЯЮТ
+
+
+
 var createActivityForm = function (body) {
-    body.find('.forms').append(
-        '<h1>CREATE</h1>' +
-        '<form>' +
-            '<div class="form-group">' +
-                '<label>Enter activity:</label>' +
-                '<textarea class="activity form-control"></textarea>' +
-            '</div>' +
-            '<div class="form-group">' +
-                '<label>Time spent:</label>' +
-                '<input class="timeSpent form-control" type="text">' +
-            '</div>' +
-            '<a href="#" class="submitNote btn btn-default">Submit</a>' +
-        '</form>' +
-        '<hr />'
-    );
+    // Здеся просто показываем модальное окно которое уже есть у нас в  DOM'е
 };
 
 var createEditActivityForm = function (body, timeSpent) {
-    body.find('.forms').append(
-        '<h1>UPDATE ' + timeSpent  + '</h1>' +
-        '<form>' +
-        '<div class="form-group">' +
-        '<label>Enter activity:</label>' +
-        '<textarea class="activity form-control"></textarea>' +
-        '</div>' +
-        '<div class="form-group">' +
-        '<label>Time spent:</label>' +
-        '<input class="timeSpent form-control" type="text">' +
-        '</div>' +
-        '<a href="#" class="submitEditNote btn btn-default">Submit edit</a>' +
-        '</form>' +
-        '<hr />'
-    );
+    // Здеся просто показываем модальное окно которое уже есть у нас в  DOM'е
 };
 
 var clearActivityFields = function (bodyTag) {
@@ -92,8 +98,8 @@ var displayActivitiesTable = function () {
         '<table class="table activities table-striped">' +
             '<thead>' +
                 '<tr>' +
-                    '<th>Activity</th>' +
-                    '<th>Hours spent</th>' +
+                    '<th class="activity">Activity</th>' +
+                    '<th class="hoursSpent">Hours spent</th>' +
                 '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -107,7 +113,8 @@ var appendActivity = function (activity) {
         "<tr>" +
             "<td>" + activity.description + "</td>" +
             "<td>" + activity.timeSpent + "</td>" +
-            "<td><button class='edit btn btn-primary'>Edit</button></td>" +
+            "<td><button class='edit btn btn-primary' data-toggle='modal' data-target='#myModal'>Edit</button></td>" +
+            "<td><button class='delete btn btn-default'>Delete</button></td>" +
         "</tr>"
     );
 };
