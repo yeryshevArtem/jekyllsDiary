@@ -1,28 +1,29 @@
 var application = function () {
     var body = $("body");
 
-    createActivityForm(body);
     displayActivitiesTable();
 
     getActivities().then(function () {
         $("button.edit").click(function(event) {
             var currentRow = $(event.target).parent().parent();
-            $('input.activityDescription').val($(currentRow.find("td")[0]).text());
-            $('input.spentTime').val($(currentRow.find("td")[1]).text());
+            $('input.id').val($(currentRow.find("td")[0]).text());
+            $('input.activityDescription').val($(currentRow.find("td")[1]).text());
+            $('input.spentTime').val($(currentRow.find("td")[2]).text());
         });
 
         $("button.delete").click(function (event) {
-            console.log("BBBBBBBBBBBBBBB");
+            var currentRow = $(event.target).parent().parent();
+            var id = $(currentRow.find("td")[0]).text();
+
             $.ajax({
                 url: 'http://127.0.0.1:8000/activities',
-                method: "POST",
-                data: JSON.stringify({ activity: { method: "DELETE" }}),
+                method: "DELETE",
+                data: JSON.stringify({ activity: { id: id }}),
                success: function (response) {
                     $(event.target).parent().parent().remove();
                     alert("Activity has been deleted!");
                 },
                 fail: function (response) {
-                    console.log(response);
                     alert("Bad request!");
                 }
             });
@@ -31,8 +32,10 @@ var application = function () {
         $("button.submitEdit").click(function (event) {
             var activity = $(".activityDescription").val();
             var timeSpent = $(".spentTime").val();
+            var id = $(".id").val();
 
-            var requestData = JSON.stringify({ activity: { description: activity, hours: timeSpent }});
+
+            var requestData = JSON.stringify({ activity: { description: activity, hours: timeSpent , id: id}});
 
             $.ajax({
                 url: 'http://127.0.0.1:8000/activities',
@@ -50,7 +53,7 @@ var application = function () {
         });
     });
 
-    $("a.submitNote").click(function() {
+    $("button.submitNote").click(function() {
         var activity = $(".activity").val();
         var timeSpent = $(".timeSpent").val();
 
@@ -77,22 +80,6 @@ var application = function () {
 
 $(document).ready(application);
 
-var createActivityForm = function (body) {
-    console.log("Wake up, Neo!");
-    body.append(
-        '<form>' +
-        '<div class="form-group">' +
-        '<label>Enter activity:</label>' +
-        '<textarea class="activity form-control"></textarea>' +
-        '</div>' +
-        '<div class="form-group">' +
-        '<label>Time spent:</label>' +
-        '<input class="timeSpent form-control" type="text">' +
-        '</div>' +
-        '<a href="#" class="submitNote btn btn-default">Submit</a>' +
-        '</form>'
-    );
-};
 
 var clearActivityFields = function (bodyTag) {
     bodyTag.find('.timeSpent').val('');
@@ -125,6 +112,7 @@ var displayActivitiesTable = function () {
 };
 
 var appendActivity = function (activity) {
+    console.log(activity);
     $("body > table > tbody").append(
         "<tr>" +
         "<td>" + activity.id + "</td>" +
@@ -152,3 +140,7 @@ var getActivities = function () {
         }
     });
 };
+
+
+
+
